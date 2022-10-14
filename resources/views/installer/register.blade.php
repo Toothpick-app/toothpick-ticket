@@ -64,7 +64,7 @@
                         <input type="password" name="app_password" id="app_password" value="" placeholder="{{ trans('Enter the password') }}" />
                         <a class="password-show"  href="javascript:void(0);" onclick="spruko(this)"><i class="fa fa-eye" aria-hidden="true" ></i></a>
                     </div>
-                    
+
                     @if ($errors->has('app_password'))
                         <span class="error-block">
                             <i class="fa fa-fw fa-exclamation-triangle" aria-hidden="true"></i>
@@ -73,28 +73,6 @@
                     @endif
                 </div>
 
-                <div class="form-group col-6 {{ $errors->has('envato_purchasecode') ? ' has-error ' : '' }}">
-                    <label for="envato_purchasecode">
-                        {{ trans('Enter the Envato Purchase Code') }}
-                        <span class="text-red">*</span>
-                    </label>
-                    <div class="pos-relative" id="password-toggle">
-                        <input type="text" name="envato_purchasecode" id="envato_purchasecode" value="" placeholder="{{ trans('Enter the Envato Purchase Code ') }}" />
-                    </div>
-                    
-                    @if ($errors->has('envato_purchasecode'))
-                        <span class="error-block">
-                            <i class="fa fa-fw fa-exclamation-triangle" aria-hidden="true"></i>
-                            {{ $errors->first('envato_purchasecode') }}
-                        </span>
-                    @elseif($message = Session::get('error'))
-                        <span class="error-block text-red">
-                            <i class="fa fa-fw fa-exclamation-triangle" aria-hidden="true"></i>
-                            {{ $message }}
-                        </span>
-                    @endif
-                   
-                </div>
             </div>
 
             <div class="buttons">
@@ -111,7 +89,7 @@
         <script type="text/javascript">
 
             "use strict";
-            
+
 
             function spruko(){
                 event.preventDefault();
@@ -140,5 +118,5 @@
             }
 
         </script>
-        
+
 @endsection

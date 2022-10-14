@@ -41,7 +41,7 @@ class Kernel extends HttpKernel
             \Illuminate\View\Middleware\ShareErrorsFromSession::class,
             \App\Http\Middleware\VerifyCsrfToken::class,
             \Illuminate\Routing\Middleware\SubstituteBindings::class,
-      
+
             \App\Http\Middleware\Languagelocaliztion::class,
             \App\Http\Middleware\HttpsProtocolMiddleware::class,
         ],
@@ -91,8 +91,7 @@ class Kernel extends HttpKernel
         'countrylistbub' => \App\Http\Middleware\CountryblockunblockMiddleware::class,
         'ipblockunblock' => \App\Http\Middleware\IPblockunblockMiddleware::class,
         'https' => \App\Http\Middleware\HttpsProtocolMiddleware::class,
-        
-        'apichecking' => \App\Http\Middleware\ApiCheckingMiddleware::class,
+
         'caninstall' => \App\Http\Middleware\Install\CanInstall::class,
         'canupdate' => \App\Http\Middleware\Install\CanUpdate::class,
     ];

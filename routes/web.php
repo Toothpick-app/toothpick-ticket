@@ -34,8 +34,8 @@ Route::middleware(ProtectAgainstSpam::class)->group(function() {
 	Route::middleware(['checkinstallation'])->group(function () {
 
 
-		Route::middleware(['admincountryblock','throttle:refresh', 'ipblockunblock','apichecking'])->group(function () {
-		
+		Route::middleware(['admincountryblock','throttle:refresh', 'ipblockunblock'])->group(function () {
+
 
 			Route::group(['namespace' => 'Admin', 'prefix'	 => 'admin'], function () {
 
@@ -44,7 +44,7 @@ Route::middleware(ProtectAgainstSpam::class)->group(function() {
 				]);
 				Route::get('/change-password', 'ChangepasswordController@index');
 				Route::post('/change-password', 'ChangepasswordController@changePassword');
-				
+
 				Route::middleware('auth','admin.auth')->group( function () {
 					Route::get('/mark-as-read', 'AdminDashboardController@markNotification')->name('admin.markNotification');
 
@@ -275,13 +275,13 @@ Route::middleware(ProtectAgainstSpam::class)->group(function() {
 			});
 
 		});
-	
-		Route::middleware(['countrylistbub', 'throttle:refresh', 'ipblockunblock', 'apichecking'])->group(function () {
-			
-		
+
+		Route::middleware(['countrylistbub', 'throttle:refresh', 'ipblockunblock'])->group(function () {
+
+
 			Route::group(['namespace' => 'User', 'prefix' => 'customer'], function(){
 
-			
+
 
 				Route::group(['namespace' => 'Auth'], function(){
 
@@ -290,11 +290,11 @@ Route::middleware(ProtectAgainstSpam::class)->group(function() {
 					Route::post('/ajaxlogin', 'LoginController@ajaxlogin')->middleware('guest:customer')->name('client.do_ajaxlogin');
 
 					Route::post('/logout', 'LoginController@logout')->middleware('auth:customer')->name('client.logout');
-					
+
 					// Social Auth
 					Route::get('/login/{social}', 'LoginController@socialLogin')->name('social.login');
 					Route::get('/login/{social}/callback','LoginController@handleProviderCallback')->name('social.login-callback');
-				
+
 					Route::get('/register', 'RegisterController@showRegistrationForm')->middleware('guest:customer')->name('auth.register');
 					Route::post('/register', 'RegisterController@register')->name('register')->middleware('guest:customer');
 					Route::post('/register1', 'RegisterController@registers')->name('register1')->middleware('guest:customer');
@@ -340,12 +340,12 @@ Route::middleware(ProtectAgainstSpam::class)->group(function() {
 					Route::get('/generalsetting', 'GeneralSettingController@index')->name('client.general');
 					Route::post('/general/notification', 'GeneralSettingController@NotifyOn')->name('client.generalsetting');
 					Route::get('/notification', 'DashboardController@notify')->name('client.notification');
-					
+
 					Route::get('/markAsRead', function(){
 
 						$notify = Auth::guard('customer')->user();
 						$notify->unreadNotifications->markAsRead();
-					
+
 					})->name('cust.mark');
 				});
 
@@ -397,7 +397,7 @@ Route::middleware(ProtectAgainstSpam::class)->group(function() {
 		Route::get('/captchasreload', [App\Http\Controllers\CaptchaipblockController::class, 'captchasreload'])->name('captchas.reload');
 		Route::get('/apifailed', [App\Http\Controllers\ApiController::class, 'index'])->name('apifail.index');
 
-		
+
 	});
 
 

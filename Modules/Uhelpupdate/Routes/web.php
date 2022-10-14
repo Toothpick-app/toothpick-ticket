@@ -20,8 +20,8 @@ Route::middleware(ProtectAgainstSpam::class)->group(function() {
 
 	Route::middleware(['checkinstallation'])->group(function () {
 
-        
-		Route::middleware(['admincountryblock','throttle:refresh', 'ipblockunblock', 'apichecking'])->group(function () {
+
+		Route::middleware(['admincountryblock','throttle:refresh', 'ipblockunblock'])->group(function () {
             Route::group([ 'prefix'	 => 'admin'], function () {
                 Route::get('envatoapitoken', 'EnvatoApiTokenController@index')->name('admin.envatoapitoken');
                 Route::post('envatoapitoken', 'EnvatoApiTokenController@storeupdate')->name('admin.envatoapitoken.storeupdate');

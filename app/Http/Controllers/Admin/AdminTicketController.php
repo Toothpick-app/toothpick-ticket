@@ -53,11 +53,11 @@ class AdminTicketController extends Controller
 
             $post = Pages::all();
             $data['page'] = $post;
-       
-           
-    
+
+
+
             return view('admin.viewticket.showticket', compact('tickets', 'categories', 'title'))->with($data);
-        
+
     }
 
     /**
@@ -71,7 +71,7 @@ class AdminTicketController extends Controller
         $this->authorize('Ticket Edit');
         $ticket = Ticket::where('ticket_id', $ticket_id)->firstOrFail();
         $comments = $ticket->comments()->latest()->paginate(10);
-        
+
         $category = $ticket->category;
 
         $title = Apptitle::first();
@@ -90,11 +90,11 @@ class AdminTicketController extends Controller
         $data['cannedmessages'] = $cannedmessage;
 
         if (request()->ajax()) {
-            
+
             $view = view('admin.viewticket.showticketdata',compact('comments'))->render();
             return response()->json(['html'=>$view]);
         }
-       
+
         return view('admin.viewticket.showticket', compact('ticket','category', 'comments', 'title','footertext'))->with($data);
     }
 
@@ -116,16 +116,16 @@ class AdminTicketController extends Controller
                 ->latest()
                 ->get();
             }
-            
+
             $output = '';
             $last_id = '';
-            $i = 0; 
-            $len = count($comments); 
+            $i = 0;
+            $len = count($comments);
             if(!$comments->isEmpty())
             {
             foreach($comments as $comment){
                 if($comment->user_id != null){
-            
+
                     if($i == 0){
                         $output .= '
                         <div class="card-body">
@@ -141,7 +141,7 @@ class AdminTicketController extends Controller
                                         }else{
                                             $output .= '<img src="'.asset('uploads/profile/user-profile.png').'"  class="media-object brround avatar-lg" alt="default">';
                                         }
-                                        $output .= 
+                                        $output .=
                                     '</a>
                                 </div>
                                 <div class="media-body">';
@@ -201,15 +201,15 @@ class AdminTicketController extends Controller
                                         $output .= '</div>';
                                     }
                                 $output .= '</div>';
-                                
+
                                     if (Auth::id() == $comment->user_id){
                                         if($comment->display != null)
                                         $output .= '<div class="ms-auto">
                                         <span class="action-btns supportnote-icon" onclick="showEditForm('.$comment->id.')"><i class="feather feather-edit text-primary fs-16"></i></span>
                                     </div>';
                                     }
-                                
-                    
+
+
                             $output .= '</div>
                         </div>';
                     }else{
@@ -357,30 +357,30 @@ class AdminTicketController extends Controller
             $media = $ticket->getMedia('ticket');
 
             foreach ($media as $media) {
-              
+
                     $media->delete();
-                
+
             }
             $medias = $ticket->comments()->get();
-            
+
             foreach ($medias as $mediass) {
                 foreach($mediass->getMedia('comments') as $mediasss){
 
                     $mediasss->delete();
                 }
-            
+
             }
             $comment->each->delete();
             $ticket->delete();
             return response()->json(['error'=>'Ticket is Deleted Successfully']);
         }else{
-           
+
             $media = $ticket->getMedia('ticket');
 
             foreach ($media as $media) {
-              
+
                     $media->delete();
-                
+
             }
             $ticket->delete();
 
@@ -403,36 +403,36 @@ class AdminTicketController extends Controller
                 $media = $ticket->getMedia('ticket');
 
                 foreach ($media as $media) {
-                
+
                         $media->delete();
-                    
+
                 }
                 $medias = $ticket->comments()->get();
-            
+
                 foreach ($medias as $mediass) {
                     foreach($mediass->getMedia('comments') as $mediasss){
-    
+
                         $mediasss->delete();
                     }
-                
+
                 }
                 $comment->each->delete();
                 $tickets->each->delete();
                 return response()->json(['error'=> trans('langconvert.functions.ticketdelete')]);
             }else{
-            
+
                 $media = $ticket->getMedia('ticket');
 
                 foreach ($media as $media) {
-                
+
                         $media->delete();
-                    
+
                 }
                 $tickets->each->delete();
             }
         }
         return response()->json(['error'=> trans('langconvert.functions.ticketdelete')]);
-        
+
     }
 
     // Admin Ticket View
@@ -472,7 +472,7 @@ class AdminTicketController extends Controller
         $userexits = Customer::where('email', $request->email)->count();
         if($userexits == 1){
             $guest = Customer::where('email', $request->email)->first();
-           
+
         }else{
             $guest = Customer::create([
 
@@ -504,21 +504,14 @@ class AdminTicketController extends Controller
         $ticket = Ticket::find($ticket->id);
         $ticket->ticket_id = setting('CUSTOMER_TICKETID').'G-'.$ticket->id;
         $ticket->user_id = Auth::user()->id;
-        if($request->input('envato_id')){
-            
-            $ticket->purchasecode = $request->input('envato_id');
-        }
-        if($request->input('envato_support')){
-            
-            $ticket->purchasecodesupport = $request->input('envato_support');
-        }
+
 
         $categoryfind = Category::find($request->category);
         $ticket->priority = $categoryfind->priority;
         if($request->subscategory){
             $ticket->subcategory = $request->subscategory;
         }
-        
+
         $ticket->update();
 
         foreach ($request->input('ticket', []) as $file) {
@@ -531,20 +524,20 @@ class AdminTicketController extends Controller
             if($notificationcat->isNotEmpty()){
 
                 foreach($notificationcat as $igc){
-                        
+
                     foreach($igc->groupsc->groupsuser()->get() as $user){
                         $icc[] .= $user->users_id;
                     }
                 }
-                
+
                 if(!$icc){
                     $admins = User::leftJoin('groups_users','groups_users.users_id','users.id')->whereNull('groups_users.groups_id')->whereNull('groups_users.users_id')->get();
                     foreach($admins as $admin){
                         $admin->notify(new TicketCreateNotifications($ticket));
                     }
-                    
+
                 }else{
-                
+
                     $user = User::whereIn('id', $icc)->get();
                     foreach($user as $users){
                         $users->notify(new TicketCreateNotifications($ticket));
@@ -553,8 +546,8 @@ class AdminTicketController extends Controller
                     foreach($admins as $admin){
                         $admin->notify(new TicketCreateNotifications($ticket));
                     }
-                    
-                    
+
+
                 }
             }else{
                 $admins = User::leftJoin('groups_users','groups_users.users_id','users.id')->whereNull('groups_users.groups_id')->whereNull('groups_users.users_id')->get();
@@ -581,13 +574,13 @@ class AdminTicketController extends Controller
 
             Mail::to(setting('mail_from_address') )
                 ->send( new mailmailablesend( 'admin_send_email_ticket_created', $ticketData ) );
-        
+
         }catch(\Exception $e){
             return response()->json(['success' => trans('langconvert.functions.ticketcreate') . $ticket->ticket_id], 200);
         }
 
         return response()->json(['success' => trans('langconvert.functions.ticketcreate') . $ticket->ticket_id], 200);
-    
+
     }
 
     public function guestmedia(Request $request)
@@ -633,12 +626,12 @@ class AdminTicketController extends Controller
 
 
 
-        
+
         if(request()->ajax()) {
             $data = Ticket::where('user_id', auth()->id())->latest('updated_at')->get();
-    
+
             return DataTables::of($data)
-        
+
             ->addColumn('ticket_id', function($data){
                 $note = DB::table('ticketnotes')->pluck('ticketnotes.ticket_id')->toArray();
                 if($data->ticketnote->isEmpty()){
@@ -649,9 +642,9 @@ class AdminTicketController extends Controller
                 return $ticket_id;
             })
             ->addColumn('subject', function($data){
-                
+
                 $subject = '<a href="'.url('admin/ticket-view/' . $data->ticket_id).'">'.Str::limit($data->subject, '40').'</a>';
-            
+
                 return $subject;
             })
             ->addColumn('cust_id',function($data){
@@ -690,13 +683,13 @@ class AdminTicketController extends Controller
                 }
             })
             ->addColumn('status', function($data){
-    
+
                 if($data->purchasecodesupport != null){
 
                     if($data->purchasecodesupport == 'Supported'){
                         if($data->status == "New"){
                             $status = '<span class="badge badge-burnt-orange"> '.$data->status.' </span> <span class="badge badge badge-success"> Supported </span>';
-        
+
                         }
                         elseif($data->status == "Re-Open"){
                             $status = '<span class="badge badge-teal">'.$data->status.'</span> <span class="badge badge badge-success"> Supported </span>';
@@ -710,13 +703,13 @@ class AdminTicketController extends Controller
                         else{
                             $status = '<span class="badge badge-danger">'.$data->status.'</span> <span class="badge badge badge-success"> Supported </span>';
                         }
-        
+
                         return $status;
                     }
                     if($data->purchasecodesupport == 'Expired'){
                         if($data->status == "New"){
                             $status = '<span class="badge badge-burnt-orange"> '.$data->status.' </span> <span class="badge badge-danger-dark"> Support Expired </span>';
-        
+
                         }
                         elseif($data->status == "Re-Open"){
                             $status = '<span class="badge badge-teal">'.$data->status.'</span> <span class="badge badge-danger-dark"> Support Expired </span>';
@@ -730,7 +723,7 @@ class AdminTicketController extends Controller
                         else{
                             $status = '<span class="badge badge-danger">'.$data->status.'</span> <span class="badge badge-danger-dark"> Support Expired </span>';
                         }
-        
+
                         return $status;
                     }
 
@@ -739,7 +732,7 @@ class AdminTicketController extends Controller
 
                     if($data->status == "New"){
                         $status = '<span class="badge badge-burnt-orange"> '.$data->status.' </span>';
-    
+
                     }
                     elseif($data->status == "Re-Open"){
                         $status = '<span class="badge badge-teal">'.$data->status.'</span> ';
@@ -753,7 +746,7 @@ class AdminTicketController extends Controller
                     else{
                         $status = '<span class="badge badge-danger">'.$data->status.'</span>';
                     }
-    
+
                     return $status;
 
                 }
@@ -769,13 +762,13 @@ class AdminTicketController extends Controller
                         if($data->toassignuser_id != null){
                             $toassignuser_id = '
                             <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-                            
+
                             <a href="javascript:void(0)" data-id="' .$data->id.'"  class="btn btn-outline-primary" id="assigned" data-bs-toggle="tooltip" data-bs-placement="top" title="Change">'.$data->toassignuser->name.'</a>
-                            
+
                             <a href="javascript:void(0)" data-id="' .$data->id.'" class="btn btn-outline-primary" id="btnremove"><i class="fe fe-x" data-bs-toggle="tooltip" data-bs-placement="top" title="Unassign"></i></a>
                             </div>
                             ';
-            
+
                         }else{
                             $toassignuser_id = '<a href="javascript:void(0)" data-id="'.$data->id.'" id="assigned" class="btn btn-outline-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Assign">
                         Assign
@@ -794,14 +787,14 @@ class AdminTicketController extends Controller
                 }else{
                     $last_reply = $data->last_reply->diffForHumans();
                 }
-    
+
                 return $last_reply;
             })
             ->addColumn('action', function($data){
-    
+
                 $button = '<div class = "d-flex">';
                 if(Auth::user()->can('Ticket Edit')){
-    
+
                     $button .= '<a href="'.url('admin/ticket-view/' . $data->ticket_id).'" class="action-btns1 edit-testimonial"><i class="feather feather-edit text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>';
                 }else{
                     $button .= '~';
@@ -811,7 +804,7 @@ class AdminTicketController extends Controller
                 }else{
                     $button .= '~';
                 }
-                
+
                 $button .= '</div>';
                 return $button;
             })
@@ -825,13 +818,13 @@ class AdminTicketController extends Controller
             ->rawColumns(['action','cust_id','subject','status','priority','created_at','toassignuser_id','last_reply','ticket_id','checkbox'])
             ->addIndexColumn()
             ->make(true);
-                
+
         }
-       
-        
+
+
        return view('admin.viewticket.myticket')->with($data);
- 
-        
+
+
     }
 
 
@@ -881,7 +874,7 @@ class AdminTicketController extends Controller
     public function sublist(Request $request){
 
         $parent_id = $request->cat_id;
-            
+
         $subcategories =Projects::select('projects.*','projects_categories.category_id')->join('projects_categories','projects_categories.projects_id', 'projects.id')
         ->where('projects_categories.category_id',$parent_id)
         ->get();
@@ -941,7 +934,7 @@ class AdminTicketController extends Controller
                 ->where('groups_users.users_id', Auth::id())
                 ->latest('tickets.updated_at')
                 ->get();
-                    
+
                 return DataTables::of($data)
                 ->addColumn('ticket_id', function($data){
                     $note = DB::table('ticketnotes')->pluck('ticketnotes.ticket_id')->toArray();
@@ -955,7 +948,7 @@ class AdminTicketController extends Controller
                 ->addColumn('subject', function($data){
 
                     $subject = '<a href="'.url('admin/ticket-view/' . $data->ticket_id).'">'.Str::limit($data->subject, '40').'</a>';
-                    
+
                     return $subject;
                 })
                 ->addColumn('cust_id',function($data){
@@ -992,16 +985,16 @@ class AdminTicketController extends Controller
                     }else{
                         return '~';
                     }
-                    
+
                 })
                 ->addColumn('status', function($data){
-    
+
                     if($data->purchasecodesupport != null){
 
                         if($data->purchasecodesupport == 'Supported'){
                             if($data->status == "New"){
                                 $status = '<span class="badge badge-burnt-orange"> '.$data->status.' </span> <span class="badge badge badge-success"> Supported </span>';
-            
+
                             }
                             elseif($data->status == "Re-Open"){
                                 $status = '<span class="badge badge-teal">'.$data->status.'</span> <span class="badge badge badge-success"> Supported </span>';
@@ -1015,13 +1008,13 @@ class AdminTicketController extends Controller
                             else{
                                 $status = '<span class="badge badge-danger">'.$data->status.'</span> <span class="badge badge badge-success"> Supported </span>';
                             }
-            
+
                             return $status;
                         }
                         if($data->purchasecodesupport == 'Expired'){
                             if($data->status == "New"){
                                 $status = '<span class="badge badge-burnt-orange"> '.$data->status.' </span> <span class="badge badge-danger-dark"> Support Expired </span>';
-            
+
                             }
                             elseif($data->status == "Re-Open"){
                                 $status = '<span class="badge badge-teal">'.$data->status.'</span> <span class="badge badge-danger-dark"> Support Expired </span>';
@@ -1035,7 +1028,7 @@ class AdminTicketController extends Controller
                             else{
                                 $status = '<span class="badge badge-danger">'.$data->status.'</span> <span class="badge badge-danger-dark"> Support Expired </span>';
                             }
-            
+
                             return $status;
                         }
 
@@ -1044,7 +1037,7 @@ class AdminTicketController extends Controller
 
                         if($data->status == "New"){
                             $status = '<span class="badge badge-burnt-orange"> '.$data->status.' </span>';
-        
+
                         }
                         elseif($data->status == "Re-Open"){
                             $status = '<span class="badge badge-teal">'.$data->status.'</span> ';
@@ -1058,7 +1051,7 @@ class AdminTicketController extends Controller
                         else{
                             $status = '<span class="badge badge-danger">'.$data->status.'</span>';
                         }
-        
+
                         return $status;
 
                     }
@@ -1069,14 +1062,14 @@ class AdminTicketController extends Controller
                     }else{
                         $last_reply = $data->last_reply->diffForHumans();
                     }
-    
+
                     return $last_reply;
                 })
                 ->addColumn('action', function($data){
-    
+
                     $button = '<div class = "d-flex">';
                     if(Auth::user()->can('Ticket Edit')){
-    
+
                         $button .= '<a href="'.url('admin/ticket-view/' . $data->ticket_id).'" class="action-btns1 edit-testimonial"><i class="feather feather-edit text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>';
                     }else{
                     $button .= '~';
@@ -1086,7 +1079,7 @@ class AdminTicketController extends Controller
                     }else{
                     $button .= '~';
                     }
-                    
+
                     $button .= '</div>';
                     return $button;
                 })
@@ -1101,13 +1094,13 @@ class AdminTicketController extends Controller
                             if($data->toassignuser_id != null){
                                 $toassignuser_id = '
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-                                
+
                                 <a href="javascript:void(0)" data-id="' .$data->id.'"  class="btn btn-outline-primary" id="assigned" data-bs-toggle="tooltip" data-bs-placement="top" title="Change">'.$data->toassignuser->name.'</a>
-                                
+
                                 <a href="javascript:void(0)" data-id="' .$data->id.'" class="btn btn-outline-primary" id="btnremove"><i class="fe fe-x" data-bs-toggle="tooltip" data-bs-placement="top" title="Unassign"></i></a>
                                 </div>
                                 ';
-                
+
                             }else{
                                 $toassignuser_id = '<a href="javascript:void(0)" data-id="'.$data->id.'" id="assigned" class="btn btn-outline-primary btn-sm"data-bs-toggle="tooltip" data-bs-placement="top" title="Assign">
                             Assign
@@ -1134,13 +1127,13 @@ class AdminTicketController extends Controller
         }
         // If no there in group we get the all tickets
         else{
-            
+
 
             if(request()->ajax()) {
                 $data = Ticket::latest('updated_at')->get();
-        
+
                 return DataTables::of($data)
-            
+
                 ->addColumn('ticket_id', function($data){
                     $note = DB::table('ticketnotes')->pluck('ticketnotes.ticket_id')->toArray();
                     if($data->ticketnote->isEmpty()){
@@ -1151,9 +1144,9 @@ class AdminTicketController extends Controller
                     return $ticket_id;
                 })
                 ->addColumn('subject', function($data){
-                   
+
                     $subject = '<a href="'.url('admin/ticket-view/' . $data->ticket_id).'">'.Str::limit($data->subject, '40').'</a>';
-                    
+
                     return $subject;
                 })
                 ->addColumn('cust_id',function($data){
@@ -1192,13 +1185,13 @@ class AdminTicketController extends Controller
                     }
                 })
                 ->addColumn('status', function($data){
-        
+
                     if($data->purchasecodesupport != null){
 
                         if($data->purchasecodesupport == 'Supported'){
                             if($data->status == "New"){
                                 $status = '<span class="badge badge-burnt-orange"> '.$data->status.' </span> <span class="badge badge badge-success"> Supported </span>';
-            
+
                             }
                             elseif($data->status == "Re-Open"){
                                 $status = '<span class="badge badge-teal">'.$data->status.'</span> <span class="badge badge badge-success"> Supported </span>';
@@ -1212,13 +1205,13 @@ class AdminTicketController extends Controller
                             else{
                                 $status = '<span class="badge badge-danger">'.$data->status.'</span> <span class="badge badge badge-success"> Supported </span>';
                             }
-            
+
                             return $status;
                         }
                         if($data->purchasecodesupport == 'Expired'){
                             if($data->status == "New"){
                                 $status = '<span class="badge badge-burnt-orange"> '.$data->status.' </span> <span class="badge badge-danger-dark"> Support Expired </span>';
-            
+
                             }
                             elseif($data->status == "Re-Open"){
                                 $status = '<span class="badge badge-teal">'.$data->status.'</span> <span class="badge badge-danger-dark"> Support Expired </span>';
@@ -1232,7 +1225,7 @@ class AdminTicketController extends Controller
                             else{
                                 $status = '<span class="badge badge-danger">'.$data->status.'</span> <span class="badge badge-danger-dark"> Support Expired </span>';
                             }
-            
+
                             return $status;
                         }
 
@@ -1241,7 +1234,7 @@ class AdminTicketController extends Controller
 
                         if($data->status == "New"){
                             $status = '<span class="badge badge-burnt-orange"> '.$data->status.' </span>';
-        
+
                         }
                         elseif($data->status == "Re-Open"){
                             $status = '<span class="badge badge-teal">'.$data->status.'</span> ';
@@ -1255,7 +1248,7 @@ class AdminTicketController extends Controller
                         else{
                             $status = '<span class="badge badge-danger">'.$data->status.'</span>';
                         }
-        
+
                         return $status;
 
                     }
@@ -1271,13 +1264,13 @@ class AdminTicketController extends Controller
                             if($data->toassignuser_id != null){
                                 $toassignuser_id = '
                                 <div class="btn-group btn-group-sm" role="group" aria-label="Basic outlined example">
-                                
+
                                 <a href="javascript:void(0)" data-id="' .$data->id.'"  class="btn btn-outline-primary" id="assigned" data-bs-toggle="tooltip" data-bs-placement="top" title="Change">'.$data->toassignuser->name.'</a>
-                                
+
                                 <a href="javascript:void(0)" data-id="' .$data->id.'" class="btn btn-outline-primary" id="btnremove"><i class="fe fe-x" data-bs-toggle="tooltip" data-bs-placement="top" title="Unassign"></i></a>
                                 </div>
                                 ';
-                
+
                             }else{
                                 $toassignuser_id = '<a href="javascript:void(0)" data-id="'.$data->id.'" id="assigned" class="btn btn-outline-primary btn-sm" data-bs-toggle="tooltip" data-bs-placement="top" title="Assign">
                             Assign
@@ -1296,14 +1289,14 @@ class AdminTicketController extends Controller
                     }else{
                         $last_reply = $data->last_reply->diffForHumans();
                     }
-        
+
                     return $last_reply;
                 })
                 ->addColumn('action', function($data){
-        
+
                     $button = '<div class = "d-flex">';
                     if(Auth::user()->can('Ticket Edit')){
-        
+
                         $button .= '<a href="'.url('admin/ticket-view/' . $data->ticket_id).'" class="action-btns1 edit-testimonial"><i class="feather feather-edit text-primary" data-bs-toggle="tooltip" data-bs-placement="top" title="Edit"></i></a>';
                     }else{
                         $button .= '~';
@@ -1313,7 +1306,7 @@ class AdminTicketController extends Controller
                     }else{
                         $button .= '~';
                     }
-                    
+
                     $button .= '</div>';
                     return $button;
                 })
@@ -1327,7 +1320,7 @@ class AdminTicketController extends Controller
                 ->rawColumns(['action','cust_id','subject','status','priority','created_at','toassignuser_id','last_reply','ticket_id','checkbox'])
                 ->addIndexColumn()
                 ->make(true);
-                 
+
             }
         }
 

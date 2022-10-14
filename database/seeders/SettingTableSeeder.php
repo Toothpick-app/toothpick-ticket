@@ -36,7 +36,7 @@ class SettingTableSeeder extends Seeder
             'updated_at' => now()
         ], [
             'key' => 'envato_purchasecode',
-            'value' => null,
+            'value' => "123",
             'created_at' => now(),
             'updated_at' => now()
         ],[
@@ -190,7 +190,7 @@ class SettingTableSeeder extends Seeder
             'value' => 'yes',
             'created_at' => now(),
             'updated_at' => now()
-        ], 
+        ],
         [
             'key' => 'CONTACT_ENABLE',
             'value' => 'yes',
@@ -237,7 +237,7 @@ class SettingTableSeeder extends Seeder
             'value' => 'no',
             'created_at' => now(),
             'updated_at' => now()
-        ], 
+        ],
         [
             'key' => 'COUNTRY_BLOCKTYPE',
             'value' => 'block',
@@ -250,14 +250,14 @@ class SettingTableSeeder extends Seeder
             'created_at' => now(),
             'updated_at' => now()
         ],
-        
+
         [
             'key' => 'ADMIN_COUNTRY_BLOCKTYPE',
             'value' => 'block',
             'created_at' => now(),
             'updated_at' => now()
         ],
-        
+
         [
             'key' => 'ADMIN_COUNTRY_LIST',
             'value' => '',
