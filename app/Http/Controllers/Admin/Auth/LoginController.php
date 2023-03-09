@@ -13,11 +13,8 @@ use App\Models\SocialAuthSetting;
 use App\Models\User;
 use Illuminate\Foundation\Auth\ThrottlesLogins;
 use Illuminate\Validation\ValidationException;
-
+use Torann\GeoIP\Facades\GeoIP;
 use App\Models\Seosetting;
-use Auth;
-use Session;
-use GeoIP;
 
 class LoginController extends Controller
 {
@@ -70,8 +67,7 @@ class LoginController extends Controller
         return view('admin.auth.login', ['url'=> 'admin/login'])->with($data);
     }
 
-    protected function credentials(Request $request)
-    {
+    protected function credentials(Request $request) {
         return [
             'email' => $request->{$this->username()},
             'password' => $request->password,
@@ -80,26 +76,21 @@ class LoginController extends Controller
     }
 
     public function redirectTo(){
+        $user = auth()->user();
+        if ($user) {
 
-            $user = auth()->user();
-            if ($user) {
+             $geolocation = GeoIP::getLocation(request()->getClientIp());
 
-                 $geolocation = GeoIP::getLocation(request()->getClientIp());
+            $user->update([
+                'timezone' => $geolocation->timezone,
+                'country' => $geolocation->country,
+            ]);
 
-                $user->update([
-                    'timezone' => $geolocation->timezone,
-                    'country' => $geolocation->country,
-                ]);
-
-                return 'admin/';
-            }
-           
-       
-        
+            return 'admin/';
+        }
     }
-    protected function validateLogin(Request $request)
-    {
-
+    
+    protected function validateLogin(Request $request) {
         $rules = [
             'email' => 'required|string|max:255',
             'password' => 'required|string|max:255'
@@ -110,14 +101,14 @@ class LoginController extends Controller
         
         $this->validate($request, $rules);
     }
-    public function userInactiveMessage()
-    {
+    
+    public function userInactiveMessage() {
         throw ValidationException::withMessages([
             $this->username() => ['error'=> trans('Your Account is Inactive. Please Contact to Admin.')],
         ]);
     }
-    public function login(Request $request)
-    {
+    
+    public function login(Request $request) {
         $this->validateLogin($request);
 
         // User type from email/username

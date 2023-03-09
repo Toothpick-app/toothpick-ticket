@@ -3,6 +3,8 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 use App\Models\Ticket\Ticket;
 use App\Models\Ticket\Comment;
@@ -15,16 +17,12 @@ use App\Models\Apptitle;
 use App\Models\Customer;
 use App\Models\CustomerSetting;
 use App\Models\User;
-use App\Models\usersettings;
 use App\Models\SocialAuthSetting;
-use Mail;
 use App\Mail\mailmailablesend;
-use Hash;
 use App\Models\Projects;
-use Auth;
 use App\Notifications\TicketCreateNotifications;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use GeoIP;
+use Torann\GeoIP\Facades\GeoIP;
 use Modules\Uhelpupdate\Entities\APIData;
 use Modules\Uhelpupdate\Entities\CategoryEnvato;
 use App\Models\VerifyOtp;
@@ -160,7 +158,7 @@ class GuestticketController extends Controller
             $custupdate->country = $geolocation->country;
             $custupdate->update();
             foreach ($request->input('ticket', []) as $file) {
-                $ticket->addMedia(public_path('uploads/guestticket/' . $file))->toMediaCollection('ticket');
+                $ticket->addMedia(upload_path('uploads/guestticket/' . $file, true))->toMediaCollection('ticket');
             }
             // Create a New ticket reply
             $notificationcat = $ticket->category->groupscategoryc()->get();
@@ -257,11 +255,7 @@ class GuestticketController extends Controller
 
     public function guestmedia(Request $request)
     {
-        $path = public_path('uploads/guestticket/');
-
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
+        $path = upload_path('uploads/guestticket/');
 
         $file = $request->file('file');
 
@@ -327,7 +321,7 @@ class GuestticketController extends Controller
             $custupdate->update();
 
             foreach ($request->input('comments', []) as $file) {
-                $comment->addMedia(public_path('uploads/guestticket/' . $file))->toMediaCollection('comments');
+                $comment->addMedia(upload_path('uploads/guestticket/' . $file, true))->toMediaCollection('comments');
             }
 
             // Closing the ticket

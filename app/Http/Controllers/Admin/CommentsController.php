@@ -7,15 +7,12 @@ use Illuminate\Http\Request;
 
 use App\Models\Ticket\Comment;
 use App\Models\Ticket\Ticket;
-use App\Models\Ticket\Category;
-use App\Models\User;
 use App\Models\Customer;
-use Auth;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Hash;
 use App\Notifications\TicketCreateNotifications;
 use App\Mail\mailmailablesend;
-use Mail;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
 
 class CommentsController extends Controller
 {
@@ -35,7 +32,7 @@ class CommentsController extends Controller
                 'comment' => $request->input('comment')
             ]);
             foreach ($request->input('comments', []) as $file) {
-                $comment->addMedia(public_path('uploads/comment/' . $file))->toMediaCollection('comments');
+                $comment->addMedia(upload_path('uploads/comment/' . $file, true))->toMediaCollection('comments');
             }
             $ticket = Ticket::where('ticket_id', $ticket_id)->firstOrFail();
             $ticket->status = 'Closed';
@@ -105,7 +102,7 @@ class CommentsController extends Controller
                 'display' => 1,
             ]);
             foreach ($request->input('comments', []) as $file) {
-                $comment->addMedia(public_path('uploads/comment/' . $file))->toMediaCollection('comments');
+                $comment->addMedia(upload_path('uploads/comment/' . $file, true))->toMediaCollection('comments');
             }
             $ticket = Ticket::where('ticket_id', $ticket_id)->firstOrFail();
             $ticket->status = $request->input('status');
@@ -197,11 +194,7 @@ class CommentsController extends Controller
 
     public function storeMedia(Request $request)
     {
-        $path = public_path('uploads/comment');
-    
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
+        $path = upload_path('uploads/comment');
     
         $file = $request->file('file');
     
@@ -272,26 +265,26 @@ class CommentsController extends Controller
         $cust = Customer::with('custsetting')->find($reopenticket->cust_id);
         $cust->notify(new TicketCreateNotifications($reopenticket));
         
-        if($ticket->cust->userType == 'Guest'){
+        if($reopenticket->cust->userType == 'Guest'){
             $ticketData = [
-                'ticket_username' => $ticket->cust->username,
-                'ticket_title' => $ticket->subject,
-                'ticket_id' => $ticket->ticket_id,
-                'comment' => $comment->comment,
-                'ratinglink' => route('guest.rating', $ticket->ticket_id),
-                'ticket_customer_url' => route('gusetticket', $ticket->ticket_id),
-                'ticket_admin_url' => url('/admin/ticket-view/'.$ticket->ticket_id),
+                'ticket_username' => $reopenticket->cust->username,
+                'ticket_title' => $reopenticket->subject,
+                'ticket_id' => $reopenticket->ticket_id,
+                'comments' => $reopenticket->comments,
+                'ratinglink' => route('guest.rating', $reopenticket->ticket_id),
+                'ticket_customer_url' => route('gusetticket', $reopenticket->ticket_id),
+                'ticket_admin_url' => url('/admin/ticket-view/'.$reopenticket->ticket_id),
             ];
         }
-        if($ticket->cust->userType == 'Customer'){
+        if($reopenticket->cust->userType == 'Customer'){
             $ticketData = [
-                'ticket_username' => $ticket->cust->username,
-                'ticket_title' => $ticket->subject,
-                'ticket_id' => $ticket->ticket_id,
-                'comment' => $comment->comment,
-                'ratinglink' => route('guest.rating', $ticket->ticket_id),
-                'ticket_customer_url' => route('loadmore.load_data', $ticket->ticket_id),
-                'ticket_admin_url' => url('/admin/ticket-view/'.$ticket->ticket_id),
+                'ticket_username' => $reopenticket->cust->username,
+                'ticket_title' => $reopenticket->subject,
+                'ticket_id' => $reopenticket->ticket_id,
+                'comments' => $reopenticket->comments,
+                'ratinglink' => route('guest.rating', $reopenticket->ticket_id),
+                'ticket_customer_url' => route('loadmore.load_data', $reopenticket->ticket_id),
+                'ticket_admin_url' => url('/admin/ticket-view/'.$reopenticket->ticket_id),
             ];
         }
 

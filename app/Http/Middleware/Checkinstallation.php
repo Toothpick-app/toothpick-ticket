@@ -16,7 +16,7 @@ class Checkinstallation
      */
     public function handle(Request $request, Closure $next)
     {
-        $installedpath = storage_path('installed');
+        $installedpath = upload_path('installed');
 
         if(!file_exists($installedpath)){
             $request->session()->flush();

@@ -3,16 +3,17 @@
 namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
-use Illuminate\Http\Request;
 
 use App\Models\Testimonial;
-use DataTables;
 use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
-use Auth;
-use Str;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
+use Illuminate\Http\Request;
+use Illuminate\Support\Facades\File;
 
 class TestimonialController extends Controller
 {
@@ -101,14 +102,14 @@ class TestimonialController extends Controller
             if($request->testimonial_id){
                 //delete old file
                 $testiimage = Testimonial::find($request->testimonial_id);
-                $imagepath =   'public/uploads/testimonial/'. $testiimage->image;
-                if(\File::exists($imagepath)){
-                    \File::delete($imagepath);
+                $imagepath =   upload_path('uploads/testimonial/'. $testiimage->image, true);
+                if(File::exists($imagepath)){
+                    File::delete($imagepath);
                 }
             }
         
             //insert new file
-            $destinationPath = 'public/uploads/testimonial/'; // upload path
+            $destinationPath = upload_path('uploads/testimonial/'); // upload path
             $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
             $files->move($destinationPath, $profileImage);
             $testi['image'] = "$profileImage";
@@ -131,7 +132,7 @@ class TestimonialController extends Controller
     {
         $this->authorize('Testimonial Delete');
         $data = Testimonial::where('id',$id)->first(['image']);
-        \File::delete('public/uploads/testimonial/'.$data->image);
+        File::delete(upload_path('uploads/testimonial/'.$data->image, true));
         $testimonial = Testimonial::find($id);
         $testimonial->delete();
 
@@ -146,7 +147,7 @@ class TestimonialController extends Controller
         $sendmails = Testimonial::whereIn('id', $id_array)->get();
 
         foreach($sendmails as $sendmail){
-        \File::delete('public/uploads/testimonial/'.$sendmail->image);
+            File::delete(upload_path('uploads/testimonial/'.$sendmail->image, true));
             $sendmail->delete();
         
         }

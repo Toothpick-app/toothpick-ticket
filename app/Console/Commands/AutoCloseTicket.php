@@ -3,12 +3,11 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use DB;
+use Illuminate\Support\Facades\Mail;
+use App\Models\Customer;
 use App\Models\Ticket\Ticket;
-use Mail;
 use App\Mail\mailmailablesend;
-use App\Mail\VerifyMail;
-use Auth;
+use App\Notifications\TicketCreateNotifications;
 
 class AutoCloseTicket extends Command
 {

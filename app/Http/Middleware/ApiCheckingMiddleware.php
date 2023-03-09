@@ -4,8 +4,8 @@ namespace App\Http\Middleware;
 
 use Closure;
 use Illuminate\Http\Request;
-use App\Helper\Installer\trait\ApichecktraitHelper;
-use Auth;
+use Illuminate\Support\Facades\Auth;
+use App\Helper\Installer\traits\ApichecktraitHelper;
 
 class ApiCheckingMiddleware
 {

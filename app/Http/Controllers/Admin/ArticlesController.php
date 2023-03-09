@@ -10,13 +10,12 @@ use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
-use Illuminate\Support\Facades\Validator;
-use File;
-use DataTables;
 use Illuminate\Support\Str;
-use DB;
-use Auth;
 use App\Models\Subcategorychild;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\File;
+use Yajra\DataTables\Facades\DataTables;
 
 class ArticlesController extends Controller
 {
@@ -200,7 +199,7 @@ class ArticlesController extends Controller
         $article->privatemode = $request->input('privatemode') ? 1 : 0;
         
         $file = $request->featureimage;
-        $fileinput = public_path('uploads/featureimage/' . $file);
+        $fileinput = upload_path('uploads/featureimage/' . $file, true);
         $article->featureimage = $file;
 
         $article->save();
@@ -222,7 +221,7 @@ class ArticlesController extends Controller
         }
 
         foreach ($request->input('article', []) as $file) {
-            $article->addMedia(public_path('uploads/article/' . $file))->toMediaCollection('article');
+            $article->addMedia(upload_path('uploads/article/' . $file, true))->toMediaCollection('article');
         }     
 
         return response()->json(['success' => trans('langconvert.functions.articlecreate')], 200);
@@ -231,12 +230,7 @@ class ArticlesController extends Controller
     public function featureimagestoreMedia(Request $request){
 
         if($request->file('file')){
-            $path = public_path('uploads/featureimage');
-    
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
-    
+            $path = upload_path('uploads/featureimage');
             $file = $request->file('file');
     
             $name = uniqid() . '_' . trim($file->getClientOriginalName());
@@ -252,11 +246,7 @@ class ArticlesController extends Controller
     public function storeMedia(Request $request)
     {
         if($request->file('file')){
-            $path = public_path('uploads/article');
-    
-            if (!file_exists($path)) {
-                mkdir($path, 0777, true);
-            }
+            $path = upload_path('uploads/article');
     
             $file = $request->file('file');
     
@@ -382,11 +372,11 @@ class ArticlesController extends Controller
         
         if($request->featureimage){
             $file = $request->featureimage;
-            $destinations = 'public/uploads/featureimage/'.$article->featureimage;
+            $destinations = upload_path('uploads/featureimage/'.$article->featureimage, true);
             if(File::exists($destinations)){
                 File::delete($destinations);
             }
-            $fileinput = public_path('uploads/featureimage/' . $file);
+            $fileinput = upload_path('uploads/featureimage/' . $file);
             $article->featureimage = $file;
         }
         
@@ -403,7 +393,7 @@ class ArticlesController extends Controller
             }
             
             foreach ($request->input('article', []) as $file) {
-                $article->addMedia(public_path('uploads/article/' . $file))->toMediaCollection('article');
+                $article->addMedia(upload_path('uploads/article/' . $file))->toMediaCollection('article');
             }
         }
 

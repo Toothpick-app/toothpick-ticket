@@ -4,15 +4,12 @@ namespace App\Http\Controllers\User\Ticket;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Ticket\Comment;
 use App\Models\Ticket\Ticket;
-use App\Models\Ticket\Category;
 use App\Models\User;
-use App\Mail\AppMailer;
-use Auth;
 use Spatie\MediaLibrary\MediaCollections\Models\Media;
-use Hash;
 use App\Notifications\TicketCreateNotifications;
 
 
@@ -45,7 +42,7 @@ class CommentsController extends Controller
             ]);
 
             foreach ($request->input('comments', []) as $file) {
-                $comment->addMedia(public_path('uploads/comment/' . $file))->toMediaCollection('comments');
+                $comment->addMedia(upload_path('uploads/comment/' . $file, true))->toMediaCollection('comments');
             }
 
             // Closing the ticket
@@ -192,11 +189,7 @@ class CommentsController extends Controller
 
     public function storeMedia(Request $request)
     {
-        $path = public_path('uploads/comment');
-    
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
+        $path = upload_path('uploads/comment');
     
         $file = $request->file('file');
     

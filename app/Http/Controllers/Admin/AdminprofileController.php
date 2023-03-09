@@ -4,8 +4,6 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-
-use Auth;
 use App\Models\User;
 use App\Models\usersettings;
 use App\Models\Customer;
@@ -15,17 +13,15 @@ use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Hash;
+use Illuminate\Support\Facades\Mail;
 use Illuminate\Support\Facades\Validator;
-use Hash;
-use File;
-use Image;
 use Illuminate\Support\Str;
-use Mail;
 use App\Mail\mailmailablesend;
-use Maatwebsite\Excel\Facades\Excel;
-use DB;
-use DataTables;
-use Session;
+use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
+use Yajra\DataTables\Facades\DataTables;
 class AdminprofileController extends Controller
 {
     public function index()
@@ -136,12 +132,10 @@ class AdminprofileController extends Controller
               // Now pass the input and rules into the validator
               $validator = Validator::make($fileArray, $rules);
 
-              if ($validator->fails())
-                {
+              if ($validator->fails()) {
                     return redirect()->back()->with('error', trans('langconvert.functions.imagevalidatefails'));
-                }else{
-                   
-                        $destination = 'public/uploads/profile';
+                } else {
+                        $destination = upload_path('uploads/profile');
                         $image_name = time() . '.' . $file->getClientOriginalExtension();
                         $resize_image = Image::make($file->getRealPath());
 
@@ -149,7 +143,7 @@ class AdminprofileController extends Controller
                         $constraint->aspectRatio();
                         })->save($destination . '/' . $image_name);
 
-                        $destinations = 'public/uploads/profile/'.$user->image;
+                        $destinations = upload_path('uploads/profile/'.$user->image, true);
                         if(File::exists($destinations)){
                             File::delete($destinations);
                         }
@@ -339,7 +333,6 @@ class AdminprofileController extends Controller
         ];
 
         try{
-
             Mail::to($customer->email)
             ->send( new mailmailablesend( 'customer_send_registration_details', $customerData ) );
         

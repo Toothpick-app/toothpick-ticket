@@ -10,11 +10,11 @@ use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
-use DataTables;
-use Auth;
 use Illuminate\Support\Facades\Validator;
-use Response;
-use File;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\File;
+use Illuminate\Support\Facades\Response;
 
 class FeatureBoxController extends Controller
 {
@@ -117,14 +117,14 @@ class FeatureBoxController extends Controller
 				
 				if($request->featurebox_id){
 					$testiimage = FeatureBox::find($request->featurebox_id);
-					$imagepath =   'public/uploads/featurebox/'. $testiimage->image;
-					if(\File::exists($imagepath)){
-						\File::delete($imagepath);
+					$imagepath =   upload_path('uploads/featurebox/'. $testiimage->image, true);
+					if(File::exists($imagepath)){
+					    File::delete($imagepath);
 					}
 				}	
 					
 				//insert new file
-				$destinationPath = 'public/uploads/featurebox/'; // upload path
+				$destinationPath = upload_path('uploads/featurebox/'); // upload path
 				$profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
 				$files->move($destinationPath, $profileImage);
 				$boxdetails['image'] = $profileImage;
@@ -133,7 +133,7 @@ class FeatureBoxController extends Controller
           	$feature = FeatureBox::updateOrCreate(['id' => $boxID], $boxdetails);
 
         	return response()->json(['code'=>200, 'success'=> trans('langconvert.functions.featureboxcreateupdate'),'data' => $feature], 200);
-		}else{
+		} else {
 			return Response::json(['errors' => $validator->errors()]);
 		}
 
@@ -143,7 +143,7 @@ class FeatureBoxController extends Controller
     {
       $this->authorize('Feature Box Delete');
       $data = FeatureBox::where('id',$id)->first(['image']);
-      \File::delete('public/uploads/feature-box/'.$data->image);
+      File::delete(upload_path('uploads/feature-box/'.$data->image, true));
       $testimonial = FeatureBox::find($id);
       $testimonial->delete();
   
@@ -156,7 +156,7 @@ class FeatureBoxController extends Controller
       $sendmails = FeatureBox::whereIn('id', $id_array)->get();
   
       foreach($sendmails as $sendmail){
-        \File::delete('public/uploads/feature/'.$sendmail->image);
+          File::delete(upload_path('uploads/feature/'.$sendmail->image, true));
           $sendmail->delete();
          
       }

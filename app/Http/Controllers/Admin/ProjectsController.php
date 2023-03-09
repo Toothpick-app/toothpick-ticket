@@ -6,18 +6,18 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Projects;
 use App\Models\Ticket\Category;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
 use App\Imports\ProjectImport;
 use Maatwebsite\Excel\Facades\Excel;
-use Auth;
-use Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Validator;
 use Response;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Models\Projects_category;
 
 class ProjectsController extends Controller

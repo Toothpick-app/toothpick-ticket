@@ -4,7 +4,7 @@ namespace App\Providers;
 
 use Illuminate\Support\ServiceProvider;
 use Config;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class MailConfigServiceProvider extends ServiceProvider
 {

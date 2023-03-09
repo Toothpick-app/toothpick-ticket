@@ -5,28 +5,22 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use Auth;
-use DB;
 use App\Models\User;
 use App\Models\Countries;
 use App\Models\Timezone;
-use Hash;
 use Spatie\Permission\Models\Role;
-use Spatie\Permission\Models\Permission;
 use App\Models\Ticket\Category;
 use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\usersettings;
 use App\Models\Seosetting;
 use App\Models\Pages;
-use Session;
 use Crypt;
 use Illuminate\Support\Str;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\mailmailablesend;
 use App\Imports\UserImport;
 use Maatwebsite\Excel\Facades\Excel;
-use DataTables;
 
 class AgentCreateController extends Controller
 {

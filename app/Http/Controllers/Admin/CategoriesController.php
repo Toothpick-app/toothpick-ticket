@@ -7,22 +7,22 @@ use Illuminate\Http\Request;
 
 use App\Models\Ticket\Category;
 use App\Models\Ticket\Ticket;
-use Auth;
-use DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
 use App\Models\Projects;
 use App\Models\Groups;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\User;
 use App\Models\Subcategory;
 use App\Models\Subcategorychild;
 use App\Models\CategoryUser;
 use Illuminate\Support\Facades\Validator;
 use Response;
-use Str;
+use Illuminate\Support\Str;
 use Modules\Uhelpupdate\Entities\CategoryEnvato;
 
 class CategoriesController extends Controller

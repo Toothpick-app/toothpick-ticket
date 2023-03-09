@@ -4,20 +4,18 @@ namespace App\Http\Controllers\Admin;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use DataTables;
 use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
 use App\Models\Announcement;
-use Auth;
-use Str;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 
-class AdminAnnouncementController extends Controller
-{
+class AdminAnnouncementController extends Controller {
 
-    public function index()
-    {
+    public function index() {
 
         $this->authorize('Announcements Access');
 

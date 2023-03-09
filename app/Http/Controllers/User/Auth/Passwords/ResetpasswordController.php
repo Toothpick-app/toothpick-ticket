@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User\Auth\Passwords;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use DB; 
+use Illuminate\Support\Facades\DB; 
 use App\Models\Customer; 
 use Hash;
 use App\Models\Apptitle;

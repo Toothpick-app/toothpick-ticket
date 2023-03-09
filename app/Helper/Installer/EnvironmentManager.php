@@ -6,8 +6,7 @@ use Exception;
 use Illuminate\Http\Request;
 use Illuminate\Support\Str;
 
-class EnvironmentManager
-{
+class EnvironmentManager {
 
     /**
      * @var string
@@ -22,21 +21,17 @@ class EnvironmentManager
     /**
      * Set the .env and .env.example paths.
      */
-    public function __construct()
-    {
+    public function __construct() {
         $this->envPath = base_path('.env');
         $this->envExamplePath = base_path('.env.example');
     }
-
-
 
     /**
      * Get the content of the .env file.
      *
      * @return string
      */
-    public function getEnvContent()
-    {
+    public function getEnvContent() {
         if (! file_exists($this->envPath)) {
             if (file_exists($this->envExamplePath)) {
                 copy($this->envExamplePath, $this->envPath);
@@ -53,8 +48,7 @@ class EnvironmentManager
      *
      * @return string
      */
-    public function getEnvPath()
-    {
+    public function getEnvPath() {
         return $this->envPath;
     }
 
@@ -63,12 +57,9 @@ class EnvironmentManager
      *
      * @return string
      */
-    public function getEnvExamplePath()
-    {
+    public function getEnvExamplePath() {
         return $this->envExamplePath;
     }
-
-
 
     /**
      * Save the form content to the .env file.
@@ -76,8 +67,7 @@ class EnvironmentManager
      * @param Request $request
      * @return string
      */
-    public function saveFileWizard(Request $request)
-    {
+    public function saveFileWizard(Request $request) {
         $results = trans('installer_messages.environment.success');
 
         $envFileData =

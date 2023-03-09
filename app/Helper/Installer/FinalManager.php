@@ -6,15 +6,14 @@ use Exception;
 use Illuminate\Support\Facades\Artisan;
 use Symfony\Component\Console\Output\BufferedOutput;
 
-class FinalManager
-{
+class FinalManager {
+    
     /**
      * Run final commands.
      *
      * @return string
      */
-    public function runFinal()
-    {
+    public function runFinal() {
         $outputLog = new BufferedOutput;
 
         $this->generateKey($outputLog);
@@ -29,8 +28,7 @@ class FinalManager
      * @param \Symfony\Component\Console\Output\BufferedOutput $outputLog
      * @return \Symfony\Component\Console\Output\BufferedOutput|array
      */
-    private static function generateKey(BufferedOutput $outputLog)
-    {
+    private static function generateKey(BufferedOutput $outputLog) {
         try {
             if (config('installer.final.key')) {
                 Artisan::call('key:generate', ['--force'=> true], $outputLog);
@@ -48,8 +46,7 @@ class FinalManager
      * @param \Symfony\Component\Console\Output\BufferedOutput $outputLog
      * @return \Symfony\Component\Console\Output\BufferedOutput|array
      */
-    private static function publishVendorAssets(BufferedOutput $outputLog)
-    {
+    private static function publishVendorAssets(BufferedOutput $outputLog) {
         try {
             if (config('installer.requirements.final.publish')) {
                 Artisan::call('vendor:publish', ['--all' => true], $outputLog);

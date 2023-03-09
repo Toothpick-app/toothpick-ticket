@@ -6,10 +6,11 @@ use App\Http\Controllers\Controller;
 use App\Providers\RouteServiceProvider;
 use Illuminate\Foundation\Auth\ResetsPasswords;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Hash;
 use App\Models\Apptitle;
 use App\Models\Seosetting;
 use App\Models\User;
-use Hash;
 
 class ResetPasswordController extends Controller
 {
@@ -69,11 +70,8 @@ class ResetPasswordController extends Controller
     
         $user = User::where('email', $request->email)->first();
         if($user->password == null){
-    
             $user->update(['password' => Hash::make($request->password)]);
-    
         }else{
-            
             $user->update(['password' => Hash::make($request->password)]);
         }
       

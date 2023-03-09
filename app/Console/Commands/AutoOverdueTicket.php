@@ -5,10 +5,9 @@ namespace App\Console\Commands;
 use Illuminate\Console\Command;
 use App\Models\Ticket\Ticket;
 use App\Models\User;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\mailmailablesend;
-use App\Mail\VerifyMail;
-use Auth;
+use App\Notifications\TicketCreateNotifications;
 
 class AutoOverdueTicket extends Command
 {
@@ -71,7 +70,7 @@ class AutoOverdueTicket extends Command
             }
 
             $icc = '';
-            $notificationcat = $ticket->category->groupscategoryc()->get();
+            $notificationcat = $autooverdues->category->groupscategoryc()->get();
 
             if($notificationcat->isNotEmpty()){
 

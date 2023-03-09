@@ -9,7 +9,7 @@ use App\Models\Customer;
 use App\Models\User;
 use App\Models\CustomerSetting;
 
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\mailmailablesend;
 use App\Notifications\TicketCreateNotifications;
 

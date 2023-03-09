@@ -11,7 +11,7 @@ class InstallFileCreate
      */
     public function create()
     {
-        $installedLogFile = storage_path('installed');
+        $installedLogFile = upload_path('installed');
 
         $dateStamp = date('Y/m/d h:i:sa');
 

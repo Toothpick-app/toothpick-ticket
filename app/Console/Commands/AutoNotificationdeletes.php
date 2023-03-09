@@ -3,7 +3,6 @@
 namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
-use Auth;
 use App\Models\User;
 use App\Models\Customer;
 

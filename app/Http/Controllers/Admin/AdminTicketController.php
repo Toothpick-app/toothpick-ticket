@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use App\Models\Ticket\Ticket;
 use App\Models\Ticket\Comment;
 use App\Models\Ticket\Category;
@@ -17,17 +17,17 @@ use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
-use DB;
-use Mail;
+use Illuminate\Support\Facades\DB;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\mailmailablesend;
 use Hash;
 use App\Models\Ticketnote;
 use App\Models\Projects;
 use App\Notifications\TicketCreateNotifications;
 use App\Models\CustomerSetting;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\Groupsusers;
-use Str;
+use Illuminate\Support\Str;
 use Modules\Uhelpupdate\Entities\Cannedmessages;
 
 class AdminTicketController extends Controller
@@ -515,7 +515,7 @@ class AdminTicketController extends Controller
         $ticket->update();
 
         foreach ($request->input('ticket', []) as $file) {
-            $ticket->addMedia(public_path('uploads/guestticket/' . $file))->toMediaCollection('ticket');
+            $ticket->addMedia(upload_path('uploads/guestticket/' . $file, true))->toMediaCollection('ticket');
         }
 
         // create ticket notification
@@ -585,12 +585,7 @@ class AdminTicketController extends Controller
 
     public function guestmedia(Request $request)
     {
-        $path = public_path('uploads/guestticket/');
-
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
-
+        $path = upload_path('uploads/guestticket/');
         $file = $request->file('file');
 
         $name = uniqid() . '_' . trim($file->getClientOriginalName());

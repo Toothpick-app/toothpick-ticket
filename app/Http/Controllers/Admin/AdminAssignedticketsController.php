@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use App\Models\Ticket\Ticket;
 use App\Models\User;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 class AdminAssignedticketsController extends Controller
 {

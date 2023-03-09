@@ -6,7 +6,7 @@ use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Providers\RouteServiceProvider;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Hash;
 use App\Models\Apptitle;
 use App\Traits\SocialAuthSettings;
@@ -22,7 +22,7 @@ use App\Models\Seosetting;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Validator;
 use Response;
-use GeoIP;
+use Torann\GeoIP\Facades\GeoIP;
 
 
 

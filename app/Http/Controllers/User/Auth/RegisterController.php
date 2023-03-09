@@ -4,7 +4,7 @@ namespace App\Http\Controllers\User\Auth;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Hash;
 use App\Models\Customer;
 use App\Models\User;
@@ -20,11 +20,11 @@ use Illuminate\Support\Facades\Input;
 use App\Notifications\NewUserNotification;
 use App\Models\Seosetting;
 use App\Models\CustomerSetting;
-use GeoIP;
+use Torann\GeoIP\Facades\GeoIP;
 use App\Traits\SocialAuthSettings;
 use App\Models\SocialAuthSetting;
 
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\mailmailablesend;
 
 class RegisterController extends Controller

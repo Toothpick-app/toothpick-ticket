@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 
 use Spatie\Permission\Models\Role;
 use Spatie\Permission\Models\Permission;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;

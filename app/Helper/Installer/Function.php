@@ -1,5 +1,8 @@
 <?php
 
+use Illuminate\Support\Facades\Route;
+use Illuminate\Support\Facades\URL;
+
 if (! function_exists('isActive')) {
     /**
      * Set the active class to the current opened menu.

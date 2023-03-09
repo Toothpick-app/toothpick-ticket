@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helper\Installer\trait;
+namespace App\Helper\Installer\traits;
 
 use App\Helper\Curl;
 
@@ -12,7 +12,6 @@ trait ApichecktraitHelper
 	 * @param $purchaseCode
 	 * @return false|mixed|string
 	 */
-
     private function purchaseCodeChecker($purchaseCode)
 	{
 		$apiUrl = config('installer.requirements.purchasecodCheckerUrl') . $purchaseCode . '&item_id=' . config('installer.requirements.itemId');
@@ -29,7 +28,6 @@ trait ApichecktraitHelper
 		
 		return $data;
 	}
-
 
 	private function purchaseCodecreate($purchaseCodes, $url,$license,$buyer,$author)
 	{

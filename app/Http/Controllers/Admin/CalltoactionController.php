@@ -10,6 +10,7 @@ use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
+use Illuminate\Support\Facades\File;
 
 class CalltoactionController extends Controller
 {
@@ -66,16 +67,15 @@ class CalltoactionController extends Controller
             'callcheck'  => $request->has('callcheck') ? 'on' : 'off',
         ];
         $callimage = callaction::find($request->id);
-        $imagepath =   'public/uploads/callaction/'. $callimage->image;
-        if(\File::exists($imagepath)){
-            \File::delete($imagepath);
+        $imagepath =   upload_path('uploads/callaction/'. $callimage->image, true);
+        if(File::exists($imagepath)){
+            File::delete($imagepath);
         }
-        
 
         if ($files = $request->file('image')) {
 
             //insert new file
-            $destinationPath = 'public/uploads/callaction/'; // upload path
+            $destinationPath = upload_path('uploads/callaction/'); // upload path
             $profileImage = date('YmdHis') . "." . $files->getClientOriginalExtension();
             $files->move($destinationPath, $profileImage);
             $calldetails['image'] = "$profileImage";

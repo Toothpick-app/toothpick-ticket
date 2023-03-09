@@ -5,7 +5,7 @@ namespace App\Http\Controllers;
 use Illuminate\Http\Request;
 
 use App\Models\ArticleComment;
-use Auth;
+use Illuminate\Support\Facades\Auth;
 
 use App\Models\Ticket\Category;
 use App\Models\Articles\Article;

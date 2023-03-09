@@ -5,9 +5,9 @@ namespace App\Http\Controllers\User\Auth\Passwords;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use DB; 
+use Illuminate\Support\Facades\DB; 
 use Carbon\Carbon; 
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\mailmailablesend;
 use App\Models\Apptitle;
 use App\Models\passwordreset;

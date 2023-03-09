@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Installer;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use Validator;
-use DB;
+use Illuminate\Support\Facades\DB;
 use App\Helper\Installer\EnvironmentManager;
 use App\Events\Install\EnivornmentManagerEvents;
 

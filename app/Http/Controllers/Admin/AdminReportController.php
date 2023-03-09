@@ -13,8 +13,8 @@ use App\Models\User;
 use App\Models\Customer;
 use App\Models\Ticket\Ticket;
 use App\Models\usersettings;
-use DB;
-use DataTables;
+use Illuminate\Support\Facades\DB;
+use Yajra\DataTables\Facades\DataTables;
 use Carbon\Carbon;
 
 class AdminReportController extends Controller

@@ -5,7 +5,7 @@ namespace App\Http\Controllers\Contactform;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 use App\Models\Contactform\ContactUs;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\mailmailablesend;
 use App\Models\Apptitle;
 use App\Models\Footertext;

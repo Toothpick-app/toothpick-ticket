@@ -5,17 +5,17 @@ namespace App\Http\Controllers\Admin;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use Auth;
-use DB;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\User;
 use App\Models\CategoryUser;
 use App\Models\Groups;
-use Str;
+use Illuminate\Support\Str;
 
 
 class GroupCreateController extends Controller

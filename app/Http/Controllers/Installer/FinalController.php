@@ -9,10 +9,9 @@ use App\Helper\Installer\FinalManager;
 use App\Models\User;
 use App\Models\usersettings;
 use App\Models\Setting;
-use App\Helper\Installer\trait\ApichecktraitHelper;
+use App\Helper\Installer\traits\ApichecktraitHelper;
 use Hash;
-use Session;
-use GeoIP;
+use Torann\GeoIP\Facades\GeoIP;
 
 class FinalController extends Controller {
 

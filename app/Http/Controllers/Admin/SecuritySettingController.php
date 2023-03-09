@@ -9,7 +9,7 @@ use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Setting;
 use App\Models\Countries;
-use GeoIP;
+use Torann\GeoIP\Facades\GeoIP;
 
 class SecuritySettingController extends Controller
 {

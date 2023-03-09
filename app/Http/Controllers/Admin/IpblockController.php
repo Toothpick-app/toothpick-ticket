@@ -8,7 +8,7 @@ use App\Models\Seosetting;
 use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Setting;
-use DataTables;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\IPLIST;
 
 class IpblockController extends Controller

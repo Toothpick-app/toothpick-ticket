@@ -5,7 +5,7 @@ namespace App\Http\Controllers\User;
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
 
-use Auth;
+use Illuminate\Support\Facades\Auth;
 use Hash;
 use AuthenticatesUsers;
 use App\Models\User;
@@ -14,8 +14,8 @@ use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
-use DataTables;
-use Str;
+use Yajra\DataTables\Facades\DataTables;
+use Illuminate\Support\Str;
 class DashboardController extends Controller
 {
     

@@ -12,13 +12,10 @@ use App\Models\User;
 use App\Models\Customer;
 use App\Models\Sendmail;
 use App\Models\senduserlist;
-use Auth;
-use Session;
-use DataTables;
+use Illuminate\Support\Facades\Auth;
+use Yajra\DataTables\Facades\DataTables;
 use App\Notifications\CustomerCustomNotifications;
-use App\Mail\AppMailer;
-use Str;
-
+use Illuminate\Support\Str;
 
 class MailboxController extends Controller
 {

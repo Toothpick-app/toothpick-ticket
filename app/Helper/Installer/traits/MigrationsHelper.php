@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Helper\Installer\trait;
+namespace App\Helper\Installer\traits;
 
 use Illuminate\Support\Facades\DB;
 

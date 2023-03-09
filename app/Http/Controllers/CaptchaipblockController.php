@@ -7,7 +7,7 @@ use Illuminate\Http\Request;
 use App\Models\Apptitle;
 use App\Models\SocialAuthSetting;
 use App\Models\Seosetting;
-use GeoIP;
+use Torann\GeoIP\Facades\GeoIP;
 use App\Models\IPLIST;
 use Cookie;
 

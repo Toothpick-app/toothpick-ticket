@@ -9,9 +9,9 @@ use Illuminate\Support\Facades\RateLimiter;
 use Illuminate\Support\Facades\Route;
 
 use App\Models\IPLIST;
-use GeoIP;
+use Torann\GeoIP\Facades\GeoIP;
 use App\Models\Setting;
-use DB;
+use Illuminate\Support\Facades\DB;
 
 class RouteServiceProvider extends ServiceProvider
 {

@@ -3,13 +3,10 @@
 namespace App\Http\Controllers;
 
 use Illuminate\Http\Request;
-use Auth;
-
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Session;
 use App\Models\Ticket\Category;
 use App\Models\Articles\Article;
-
-use App\Models\User;
-use App\Models\Role;
 use App\Models\ArticleComment;
 use App\Models\Articles\article_likes;
 use App\Models\Articles\article_dislikes;
@@ -24,10 +21,8 @@ use App\Models\Pages;
 use App\Models\Announcement;
 use App\Models\SocialAuthSetting;
 use Cookie;
-use Session;
 use Storage;
-use Carbon;
-use Str;
+use Illuminate\Support\Str;
 
 class HomeController extends Controller
 {

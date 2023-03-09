@@ -4,27 +4,21 @@ namespace App\Http\Controllers\User\Ticket;
 
 use App\Http\Controllers\Controller;
 use Illuminate\Http\Request;
-use Auth;
+use Illuminate\Support\Str;
+use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\Mail;
+use Yajra\DataTables\Facades\DataTables;
 use App\Models\Ticket\Ticket;
 use App\Models\Ticket\Comment;
 use App\Models\Ticket\Category;
-use App\Mail\AppMailer;
 use App\Models\User;
-use App\Models\Role;
 use App\Models\Apptitle;
-use DB;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
 use App\Models\Projects;
-use URL;
-use Mail;
 use App\Mail\mailmailablesend;
 use App\Notifications\TicketCreateNotifications;
-use App\Models\Customer;
-use App\Models\Groupsusers;
-use DataTables;
-use Str;
 use App\Models\Articles\Article;
 
 class TicketController extends Controller
@@ -125,7 +119,7 @@ class TicketController extends Controller
         $ticket->update();
            
         foreach ($request->input('ticket', []) as $file) {
-        $ticket->addMedia(public_path('uploads/ticket/' . $file))->toMediaCollection('ticket');
+        $ticket->addMedia(upload_path('uploads/ticket/' . $file, true))->toMediaCollection('ticket');
         }
 
         // Create a New ticket reply
@@ -194,11 +188,7 @@ class TicketController extends Controller
 
     public function storeMedia(Request $request)
     {
-        $path = public_path('uploads/ticket');
-    
-        if (!file_exists($path)) {
-            mkdir($path, 0777, true);
-        }
+        $path = upload_path('uploads/ticket');
     
         $file = $request->file('file');
     

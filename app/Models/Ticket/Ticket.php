@@ -7,9 +7,6 @@ use Illuminate\Database\Eloquent\Model;
 use Spatie\MediaLibrary\HasMedia;
 use Spatie\MediaLibrary\InteractsWithMedia;
 
-use App\Models\Ticket\Ticket;
-use App\Models\Ticket\Comment;
-use App\Models\Ticket\Category;
 use App\Models\Customer;
 use App\Models\User;
 use App\Models\Role;
@@ -75,7 +72,7 @@ class Ticket extends Model implements HasMedia
     }
 
     public function ticketnote(){
-        return $this->hasmany(Ticketnote::class, 'ticket_id');
+        return $this->hasMany(Ticketnote::class, 'ticket_id');
     }
 
     public function registerMediaCollections(): void

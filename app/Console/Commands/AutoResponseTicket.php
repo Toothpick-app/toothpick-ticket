@@ -4,11 +4,11 @@ namespace App\Console\Commands;
 
 use Illuminate\Console\Command;
 use App\Models\Ticket\Ticket;
-use Mail;
+use Illuminate\Support\Facades\Mail;
 use App\Mail\mailmailablesend;
-use App\Mail\VerifyMail;
-use Auth;
 use Carbon\Carbon;
+use App\Models\Customer;
+use App\Notifications\TicketCreateNotifications;
 
 class AutoResponseTicket extends Command
 {

@@ -8,7 +8,7 @@ class Requirementchecker
     /**
      * Minimum PHP Version Supported (Override is in installer.php config file).
      *
-     * @var _minPhpVersion
+     * @var $_minPhpVersion
      */
     private $_minPhpVersion = '8.0.0';
 
@@ -95,6 +95,7 @@ class Requirementchecker
     private static function getPhpVersionInfo()
     {
         $currentVersionFull = PHP_VERSION;
+        $filtered = [];
         preg_match("#^\d+(\.\d+)*#", $currentVersionFull, $filtered);
         $currentVersion = $filtered[0];
 

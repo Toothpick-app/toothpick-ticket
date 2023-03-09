@@ -8,16 +8,14 @@ use App\Models\Customer;
 use App\Models\CustomerSetting;
 use App\Models\Countries;
 use App\Models\Timezone;
-use Auth;
-use Hash;
-use File;
 use App\Models\Apptitle;
 use App\Models\Footertext;
 use App\Models\Seosetting;
 use App\Models\Pages;
 use Illuminate\Support\Facades\Validator;
-use Image;
-
+use Illuminate\Support\Facades\Auth;
+use Intervention\Image\Facades\Image;
+use Illuminate\Support\Facades\File;
 
 class UserprofileController extends Controller
 {
@@ -91,7 +89,7 @@ class UserprofileController extends Controller
                     return redirect()->back()->with('error', trans('langconvert.functions.imagevalidatefails'));
                 }else{
                    
-                    $destination = 'public/uploads/profile';
+                    $destination = upload_path('uploads/profile');
                     $image_name = time() . '.' . $file->getClientOriginalExtension();
                     $resize_image = Image::make($file->getRealPath());
 
@@ -99,7 +97,7 @@ class UserprofileController extends Controller
                     $constraint->aspectRatio();
                     })->save($destination . '/' . $image_name);
 
-                    $destinations = 'public/uploads/profile/'.$user->image;
+                    $destinations = upload_path('uploads/profile/'.$user->image, true);
                     if(File::exists($destinations)){
                         File::delete($destinations);
                     }

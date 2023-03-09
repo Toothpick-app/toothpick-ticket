@@ -213,6 +213,7 @@ class Curl
 		$buffer = curl_exec($ch);
 		curl_close($ch);
 		
+		$tmp = [];
 		preg_match_all('|Set-Cookie: (.*);|U', $buffer, $tmp);
 		if (isset($tmp[1]) && !empty($tmp[1])) {
 			$cookies = implode(';', $tmp[1]);
